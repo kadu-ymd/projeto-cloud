@@ -1,0 +1,29 @@
+services:
+  api:
+    build: 
+      context: 
+        ./api
+    networks:
+      - app
+    depends_on:
+      - db
+    environment:
+      - DB_USERNAME=${DB_USERNAME:-projeto}
+      - DB_PASSWORD=${DB_PASSWORD:-projeto}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_NAME=${DB_NAME:-projeto}
+      - SECRET_KEY=${SECRET_KEY:-secretkey}
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:17
+    networks:
+      - app
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-projeto}
+      POSTGRES_USER: ${DB_USER:-projeto}
+      POSTGRES_DB: ${DB_NAME:-projeto}
+
+networks:
+  app:

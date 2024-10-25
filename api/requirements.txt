@@ -1,0 +1,6 @@
+fastapi[standard]
+requests
+sqlmodel
+psycopg2-binary
+pyjwt
+python-dotenv
