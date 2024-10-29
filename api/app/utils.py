@@ -3,7 +3,7 @@ from os import getenv
 from dotenv import load_dotenv
 from fastapi import HTTPException, status
 
-def get_videos(api_key: str, api_url: str, n: int = 5):
+def get_videos(api_key: str, api_url: str, n: int = 1):
     video_info: dict
     
     params = {
@@ -29,9 +29,9 @@ def get_videos(api_key: str, api_url: str, n: int = 5):
 
             video_info = {
                 "title": video['snippet']['title'],
-                "video_id": video['id'],
+                "video_id": (video['id']),
                 "description": video['snippet']['description'],
-                "n_views": video['statistics']['viewCount']
+                "n_views": (video['statistics']['viewCount'])
             }
         return video_info
     else:

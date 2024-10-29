@@ -66,6 +66,20 @@ def get_session():
 def hash_password(password: str) -> str:
     return sha256(password.encode("utf-8")).hexdigest()
 
+def verify_token(jwt_token: str):
+    is_valid: bool = False
+    
+    try:
+        payload = jwt.decode(jwt_token, SECRET_KEY, HASH_ALGORITHM)
+        print(payload)
+    except:
+        payload = None
+
+    if payload:
+        is_valid = True
+
+    return is_valid
+
 SessionDep = Annotated[Session, Depends(get_session)]
 
 app = FastAPI()
@@ -109,6 +123,10 @@ def login(user_login: UserLogin, session: SessionDep):
 @app.get("/consultar")
 def consultar(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
     print(credentials.scheme, credentials.credentials)
-    get_videos(api_key=API_KEY, api_url=API_URL)
+
+    if credentials.scheme != "Bearer":
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Método de autenticação inválido")
+    elif not verify_token(credentials.credentials):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Token inválido!")
     
-    return 
+    return get_videos(api_key=API_KEY, api_url=API_URL)
