@@ -1,14 +1,16 @@
 import requests
-from os import getenv
-from dotenv import load_dotenv
-from fastapi import HTTPException, status
 
 def get_videos(api_key: str, api_url: str, n: int = 1):
-    video_info: dict
+    video_info: dict = {
+        "title": None,
+        "video_id": None,
+        "description": None,
+        "n_views": None
+    }  
     
     params = {
         "part": "snippet,contentDetails,statistics", 
-        "chart": "mostPopular", # ver por vídeos de jogos, que atualizam mais constantemente
+        "chart": "mostPopular",
         "regionCode": "BR", 
         "maxResults": n, 
         "key": api_key
@@ -21,11 +23,6 @@ def get_videos(api_key: str, api_url: str, n: int = 1):
         data = response.json()
 
         for video in data['items']:
-            print(f"Título: {type(video['snippet']['title'])}")
-            print(f"ID do vídeo: {type(video['id'])}")
-            print(f"Descrição: {type(video['snippet']['description'])}")
-            print(f"Visualizações: {type(video['statistics']['viewCount'])}")
-            print("-----------")
 
             video_info = {
                 "title": video['snippet']['title'],
@@ -35,4 +32,5 @@ def get_videos(api_key: str, api_url: str, n: int = 1):
             }
         return video_info
     else:
-        return None
+        return video_info
+    

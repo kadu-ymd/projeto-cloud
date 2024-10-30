@@ -7,41 +7,9 @@ from hashlib import sha256
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import jwt
 from .utils import get_videos
+from .models import *
 
 load_dotenv()
-
-class UserBase(SQLModel):
-    email: str
-    password: str
-
-class User(UserBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str
-
-    model_config = {
-        'json_schema_extra': {
-            'examples': [
-                {
-                    'name': 'João',
-                    'email': 'joao@gmail.com',
-                    'password': 's3nh4s3cr3t4'
-                }
-            ]
-        }
-    }
-
-class UserLogin(UserBase):
-
-    model_config = {
-        'json_schema_extra': {
-            'examples': [
-                {
-                    'email': 'joao@gmail.com',
-                    'password': 's3nh4s3cr3t4'
-                }
-            ]
-        }
-    }
 
 DATABASE_URL = f"postgresql+psycopg2://{getenv('DB_USERNAME')}:{getenv('DB_PASSWORD')}@{getenv('DB_HOST')}/{getenv('DB_NAME')}"
 
@@ -49,11 +17,9 @@ SECRET_KEY = f"{getenv('SECRET_KEY')}"
 
 HASH_ALGORITHM = "HS256"
 
-API_KEY = f"{getenv('API_KEY')}"
+KEY_API = f"{getenv('KEY_API')}"
 
 API_URL = "https://www.googleapis.com/youtube/v3/videos"
-
-print(SECRET_KEY, API_KEY)
 
 engine = create_engine(DATABASE_URL)
 
@@ -71,7 +37,6 @@ def verify_token(jwt_token: str):
     
     try:
         payload = jwt.decode(jwt_token, SECRET_KEY, HASH_ALGORITHM)
-        print(payload)
     except:
         payload = None
 
@@ -122,11 +87,9 @@ def login(user_login: UserLogin, session: SessionDep):
 
 @app.get("/consultar")
 def consultar(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
-    print(credentials.scheme, credentials.credentials)
-
     if credentials.scheme != "Bearer":
-        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Método de autenticação inválido")
+        raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Método de autenticação inválido.")
     elif not verify_token(credentials.credentials):
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Token inválido!")
     
-    return get_videos(api_key=API_KEY, api_url=API_URL)
+    return get_videos(api_key=KEY_API, api_url=API_URL)
