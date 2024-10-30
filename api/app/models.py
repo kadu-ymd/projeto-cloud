@@ -1,4 +1,15 @@
 from sqlmodel import SQLModel, Field
+from enum import Enum
+
+class Tags(Enum):
+    auth = "Auth"
+
+    __metadata__ = [
+        {
+            "name": "Auth",
+            "description": "*Endpoints* para registro e autenticação do usuário no banco de dados"
+        }
+    ]
 
 class UserBase(SQLModel):
     email: str
