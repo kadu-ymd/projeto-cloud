@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from hashlib import sha256
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import jwt
-from .utils import get_videos
+from .utils import *
 from .models import *
 
 load_dotenv()
@@ -29,22 +29,6 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-def hash_password(password: str) -> str:
-    return sha256(password.encode("utf-8")).hexdigest()
-
-def verify_token(jwt_token: str):
-    is_valid: bool = False
-    
-    try:
-        payload = jwt.decode(jwt_token, SECRET_KEY, HASH_ALGORITHM)
-    except:
-        payload = None
-
-    if payload:
-        is_valid = True
-
-    return is_valid
-
 SessionDep = Annotated[Session, Depends(get_session)]
 
 app = FastAPI()
@@ -53,14 +37,13 @@ security = HTTPBearer()
 
 @app.post("/registrar")
 def registrar(user: User, session: SessionDep):
-
     results = session.exec(select(User))
 
     for user_email in results:
         if user_email.email == user.email:
             raise HTTPException(status.HTTP_409_CONFLICT, detail="E-mail já está cadastrado.")
 
-    hashed_pw = sha256(user.password.encode("utf-8")).hexdigest()
+    hashed_pw = hash_password(user.password)
     new_user = User(name=user.name, 
                     email=user.email, 
                     password=hashed_pw)
@@ -69,7 +52,7 @@ def registrar(user: User, session: SessionDep):
     session.commit()
     session.refresh(new_user)
 
-    return jwt.encode({"email": user.email}, SECRET_KEY, algorithm=HASH_ALGORITHM)
+    return jwt_encode({"email": user.email}, SECRET_KEY, HASH_ALGORITHM)
 
 @app.post("/login")
 def login(user_login: UserLogin, session: SessionDep):
@@ -79,7 +62,7 @@ def login(user_login: UserLogin, session: SessionDep):
     for user in results:
         if (user_login.email == user.email):
             if (hash_password(user_login.password) == user.password):
-                return jwt.encode({"name": user.name}, SECRET_KEY, algorithm=HASH_ALGORITHM)
+                return jwt_encode({"name": user.name}, SECRET_KEY, HASH_ALGORITHM)
             else:
                 raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="E-mail e/ou senha inválidos.")
 
@@ -89,7 +72,7 @@ def login(user_login: UserLogin, session: SessionDep):
 def consultar(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]):
     if credentials.scheme != "Bearer":
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Método de autenticação inválido.")
-    elif not verify_token(credentials.credentials):
+    elif not verify_token(credentials.credentials, SECRET_KEY, HASH_ALGORITHM):
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail="Token inválido!")
     
     return get_videos(api_key=KEY_API, api_url=API_URL)

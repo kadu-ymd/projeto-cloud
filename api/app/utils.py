@@ -1,6 +1,8 @@
 import requests
+import jwt
+from hashlib import sha256
 
-def get_videos(api_key: str, api_url: str, n: int = 1):
+def get_videos(api_key: str, api_url: str, n: int = 1) -> dict[str, str | None]:
     video_info: dict = {
         "title": None,
         "video_id": None,
@@ -16,7 +18,6 @@ def get_videos(api_key: str, api_url: str, n: int = 1):
         "key": api_key
     }
 
-    print(api_key, api_url)
     response = requests.get(api_url, params=params)
 
     if response.status_code == 200:
@@ -34,3 +35,24 @@ def get_videos(api_key: str, api_url: str, n: int = 1):
     else:
         return video_info
     
+def hash_password(password: str) -> str:
+    return sha256(password.encode("utf-8")).hexdigest()
+
+def jwt_encode(payload: dict, secret_key: str, ha: str) -> str:
+    return jwt.encode(payload, secret_key, ha)
+
+def jwt_decode(jwt_token: str, secret_key: str, ha: str) -> dict:
+    return jwt.decode(jwt_token, secret_key, ha)
+
+def verify_token(jwt_token: str, secret_key: str, ha: str) -> bool:
+    is_valid: bool = False
+    
+    try:
+        payload = jwt_decode(jwt_token, secret_key, ha)
+    except:
+        payload = None
+
+    if payload:
+        is_valid = True
+
+    return is_valid
