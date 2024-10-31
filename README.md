@@ -23,3 +23,5 @@ mkdocs gh-deploy --force
 ## Links
 
 - [Docker Hub da aplicação](https://hub.docker.com/r/carlosepy/projeto-cloud)
+
+- [Vídeo explicativo da aplicação](https://youtu.be/lr6lK1BI74w)
