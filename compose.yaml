@@ -1,6 +1,6 @@
 services:
   api:
-    image: carlosepy/projeto-cloud:v1.1
+    image: carlosepy/projeto-cloud:v1.3
     networks:
       - app
     depends_on:
@@ -26,3 +26,4 @@ services:
 
 networks:
   app:
+    driver: bridge
