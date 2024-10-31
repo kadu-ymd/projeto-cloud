@@ -1,6 +1,6 @@
 services:
   api:
-    image: carlosepy/projeto-cloud:v1.3
+    image: carlosepy/projeto-cloud:v1.4
     networks:
       - app
     depends_on:
