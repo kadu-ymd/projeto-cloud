@@ -1,51 +1,61 @@
 # YouTube API v3 - Chave da API
 
+## Primeiros passos
 
-## Aures quod nonaque inquit circumdat
+Acesse o [Google Cloud Console](https://console.cloud.google.com) e faça login, se já não o fez.
 
-[Lorem](http://maiusque-troiana.net/sifrigore.php) markdownum, credentes illa,
-*caelicolae usquam* in parvo; fastus quem. Tempto quid pater alto, non freta
-nube amplexus, sacrorum ut mediis illuc: ipsa mulcet spargit. Thalamos canit.
-Inquit undas turbavere tamen, nec est fugio sed pars pictis et [vitae iuvenem
-perfringit](http://saxumin.io/efferor) Elymumque postis.
+### Passo 1
 
-- Vultum profeci tua viderat pugnantemque tibi lacrimasque
-- Virgo ait
-- Paras carbasa
-- Avia pater ab fuit semina et vidit
-- Ferebat non cum prodigiosa et forsitan postquam
+Clique em **Selecione um projeto** na caixa de seleção, no canto **superior esquerdo** da página.
 
-Iamque et mihi permansit, pulsat et sed ille, iunget Pandioniae **auctor
-congestaque nomen** virgo petite. Et saltem castrorum At egentes Aurora. Aeoliis
-additur rapuitque liquidis humanam nomine et aurea lugubris letalem accessere.
+![Passo 1](img/chave_api/etapa1_api_key.png)
 
-## Modo cum Laetitia terram Hectora
+### Passo 2
 
-Et cacumine palus laborem, neque adspiciam plus. Monstri nulla flebat? Quoque
-Eous, olor! Acumine furori. Arva humum Pyrrhus, dat suo minimo cumque quae
-mortisque corpusque et vestis de [apta](http://www.certare-ausa.net/vidit):
-vincere illa placere intexto.
+Uma janela abrirá com os seus projetos. Clique em **Novo Projeto** para criar um projeto.
 
-> Sub tangere ambas forti [undis aderam
-> fontibus](http://hesioneque.org/respicere) post omne unde discusso: illa
-> caede, in durisque nais. Se longas **Iovem exspectatus amor**, nec huic vicit
-> incaluit.
+![Passo 2](img/chave_api/etapa2_api_key.png)
 
-## Sese invia ecce foret pectoris
+### Passo 3
 
-Ales modo genetrix dedisti sortemque, rapinae et figere in *in*? [Lammina si
-fregit](http://ire.com/vitat-tenuere); iuvenum lecte. Cadmus leae vince in
-silices petit tamen; tum coeunt pallenti geminata; auro.
+Atribua um nome ao seu projeto. Chamamos aqui de "nome-generico" para fins práticos. Em seguida, clique em **Criar**.
 
-> Robora restantem; **at et Victoria** limite Hyadasque pretium iacentem. Quoque
-> correptus quae tamen aversa animalia [serpentem
-> veteres](http://capillos.org/suffuderatverba.html). Residunt modo abesse
-> tempore visus fuit Meleagros maius crescitque ne molis; est formam narretque
-> pictae.
+![Passo 3](img/chave_api/etapa3_api_key.png)
 
-In diversa duxere? Mater ver timido ad doleas patrem ut effuge haberet, nec
-Styphelumque.
+### Passo 4
 
-Vidit mando formae dixit venatrixque terra Saturnia neque nec, haeserunt natos
-mea, mergit! Quoque illum Anthedone a! Capiti erat aper incurva, tota? Fuit
-rorantia, et parabat facit et ipsa.
+Uma notificação aparecerá no canto superior direito da sua tela indicando que o projeto está sendo criado. Após finalizar o processo, clique em **Selecionar Projeto** na notificação ou repita o passo 1, porém, dessa vez, selecionando o projeto que foi criado.
+
+![Passo 4](img/chave_api/etapa4_api_key.png)
+
+### Passo 5
+
+Com o projeto selecionado, acesse a aba de **APIs e Serviços** pelo menu de *Acesso Rápido* ou pelo menu hambúrguer no canto superior esquerdo da tela.
+
+![Passo 5](img/chave_api/etapa5_api_key.png)
+
+### Passo 6
+
+Em seguida, clique em **Ativar APIs e Serviços** e pesquise por "YouTube Data API v3".
+
+![Passo 6](img/chave_api/etapa6_api_key.png)
+
+### Passo 7
+
+Ative o serviço "YouTube Data API v3".
+
+![Passo 7](img/chave_api/etapa7_api_key.png)
+
+### Passo 8
+
+Clique na aba Credenciais no menu esquerdo.
+
+![Passo 8](img/chave_api/etapa8_api_key.png)
+
+### Passo 9
+
+Clique em **Criar credenciais** > **Chave de API**
+
+![Passo 9](img/chave_api/etapa9_api_key.png)
+
+Pronto! Agora copie e cole sua chave no arquivo `.env` (no campo `KEY_API`) e siga a documentação a partir de onde parou.
