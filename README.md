@@ -1,5 +1,7 @@
 # Projeto - Computação em Nuvem - Insper 2024.2
 
+Desenvolvedores: Carlos Eduardo Porciuncula Yamada
+
 ## Deploy GitHub Pages com MkDocs
 
 A página contendo a documentação do projeto foi feita utilizando MkDocs junto a outras extensões como o Material for MkDocs.
