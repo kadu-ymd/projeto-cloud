@@ -4,7 +4,7 @@ Desenvolvedores: Carlos Eduardo Porciuncula Yamada
 
 ## Deploy GitHub Pages com MkDocs
 
-A página contendo a documentação do projeto foi feita utilizando MkDocs junto a outras extensões como o Material for MkDocs.
+A página contendo a documentação do projeto foi feita utilizando MkDocs junto a outras extensões como o Material for MkDocs e está disponível no GitHub Pages desse repositório.
 
 Para desenvolvimento local, execute o comando, dentro da pasta `documentation`:
 
@@ -19,7 +19,6 @@ O deploy da aplicação foi feito utilizando o comando:
 ```bash
 mkdocs gh-deploy --force
 ```
-
 
 ## Links
 
