@@ -223,7 +223,112 @@ docker compose up -d --build
 
     Lembre-se de abrir o aplicativo do Docker antes de executar o `docker compose`!
 
+## Publicação do projeto na AWS
+
+Para publicar o projeto, utilizaremos o Kubernetes, que é uma ferramenta de orquestração de contêineres junto ao EKS (Elastic Kubernetes Service), que é um serviço gerenciado voltado à facilitar o uso de tal ferramenta com a AWS.
+
+Foi criada uma infraestrutura de tal forma que as aplicações (API e banco de dados) estejam em um contexto isolado ao mundo externo, com apenas a porta da API para que seja feita a comunicação com outros serviços, tais como um possível *loadbalancer* caso exista necessidade de aumentar o número de réplicas da aplicação (escalabilidade).
+
+Foi configurado o ambiente do EKS e criadas duas instâncias em EC2 (Elastic Compute Cloud), que é um serviço que disponibiliza ao usuário computadores virtuais para executar aplicações. As duas instâncias são a API e o banco de dados PostgreSQL.
+
+Para isso, com o auxílio do CloudFormation, que é um serviço semelhante ao Terraform, foram criados dois arquivos `yaml`, um para cada serviço e foram aplicados ao serviço da AWS através do comando `kubectl apply -f <nome-do-arquivo>`. Os arquivos são mostrados abaixo:
+
+=== "app-deployment.yaml"
+
+    ``` yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: fastapi-deployment
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: fastapi-app
+      template:
+        metadata:
+          labels:
+            app: fastapi-app
+        spec:
+          containers:
+          - name: fastapi-container
+            image: carlosepy/projeto-cloud:v1.4
+            ports:
+            - containerPort: 8000
+            env:
+            - name: DB_USERNAME
+              value: "projeto"
+            - name: DB_PASSWORD
+              value: "projeto"
+            - name: DB_HOST
+              value: "db-service"
+            - name: DB_NAME
+              value: "projeto"
+            - name: SECRET_KEY
+              value: "secretkey" # valor que pode ser alterado para geração dos tokens JWT
+            - name: KEY_API
+              value: "suachave" # alterar para o valor obtido através do processo de obtenção da chave da API do Youtube v3
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: fastapi-service
+    spec:
+      selector:
+        app: fastapi-app
+      ports:
+      - protocol: TCP
+        port: 8000
+        targetPort: 8000
+      type: LoadBalancer
+    ```
+
+=== "db-deployment.yaml"
+
+    ``` yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: db
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: db
+      template:
+        metadata:
+          labels:
+            app: db
+        spec:
+          containers:
+          - name: db
+            image: postgres:17
+            env:
+            - name: POSTGRES_DB
+              value: "projeto"
+            - name: POSTGRES_USER
+              value: "projeto"
+            - name: POSTGRES_PASSWORD
+              value: "projeto"
+            ports:
+            - containerPort: 5432
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: db-service
+    spec:
+      selector:
+        app: db
+      ports:
+      - port: 5432
+        targetPort: 5432
+    ```
+
+Para acessar o site que contém a aplicação, basta clicar acesse o README no [repositório](https://github.com/kadu-ymd/projeto-cloud) e clique em "**Link para a página da documentação da API**". O vídeo explicativo contendo a demonstração do que foi feito também está no link do GitHub anteriormente endereçado.
+
 ## Referências
 
 1. [YouTube Data API v3](https://developers.google.com/youtube/v3?hl=pt-br)
 2. [Ajuda do YouTube](https://support.google.com/youtube/?hl=pt-BR&sjid=17857485006955206207-SA#topic=9257498) > Central de Ajuda > Assistir vídeos >  Encontrar vídeos para assistir > Encontrar vídeos para assistir > [Em Alta no YouTube](https://support.google.com/youtube/answer/7239739?hl=pt-BR#:~:text=Em%20alguns%20países%2C%20os%20Shorts,na%20mesma%20posição%20na%20lista.)
+3. [Como criar um cluster Kubernetes na AWS com EKS](https://www.youtube.com/live/JrT5YV1KMeY?si=dr6A7FnBwGGAUUAN)
