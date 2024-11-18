@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-app
+  template:
+    metadata:
+      labels:
+        app: fastapi-app
+    spec:
+      containers:
+      - name: fastapi-container
+        image: carlosepy/projeto-cloud:v1.4
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_USERNAME
+          value: "projeto"
+        - name: DB_PASSWORD
+          value: "projeto"
+        - name: DB_HOST
+          value: "db-service"
+        - name: DB_NAME
+          value: "projeto"
+        - name: SECRET_KEY
+          value: "secretkey" # valor que pode ser alterado para geração dos tokens JWT
+        - name: KEY_API
+          value: "suachave" # alterar para o valor obtido através do processo de obtenção da chave da API do Youtube v3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-service
+spec:
+  selector:
+    app: fastapi-app
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: LoadBalancer
