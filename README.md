@@ -24,4 +24,4 @@ mkdocs gh-deploy --force
 
 - [Docker Hub da aplicação](https://hub.docker.com/r/carlosepy/projeto-cloud)
 - [Vídeo explicativo da aplicação](https://youtu.be/lr6lK1BI74w)
-- [Link para a página da documentação da API](a09ee328db3f24b1fb7ce3264a54eb04-8417921.us-east-1.elb.amazonaws.com:8000/docs)
+- [Link para a página da documentação da API](http://a09ee328db3f24b1fb7ce3264a54eb04-8417921.us-east-1.elb.amazonaws.com:8000/docs)
